@@ -23,6 +23,7 @@ app.get("/note", async (req, res) => {
     }
 })
 
+
 app.post("/note", async (req, res) => {
     try {
         const doc = await collection.findOne({ name: "user" })
@@ -42,6 +43,18 @@ app.post("/note", async (req, res) => {
     }
 })
 
+app.post('/note/done/:id', async (req, res) => {
+    const id = req.params.id
+    try {
+        const doc = await collection.findOne({ name: "user" })
+        let ans = doc.notes[id].status
+        doc.notes[id].status = !ans
+        doc.save()
+        res.send(doc)
+    } catch (error) {
+        console.log("error while note done patch : " + error)
+    }
+})
 app.patch("/note/:id", async (req, res) => {
     const id = req.params.id
     const { title, content } = req.body

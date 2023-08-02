@@ -3,13 +3,13 @@ import Button from '@mui/material/Button';
 import axios from 'axios'
 import AddIcon from '@mui/icons-material/Add';
 // import Note from './Note';
+import AddTaskIcon from '@mui/icons-material/AddTask';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import BASE_URL from '../url';
 
 
 const CreateNote = () => {
-
     const [expand, setExpand] = useState(false);
     const [allNote, setAllNote] = useState([])
     const [editIndex, setEditIndex] = useState(-1);
@@ -18,7 +18,8 @@ const CreateNote = () => {
 
     const [note, setNote] = useState({
         title: "",
-        content: ""
+        content: "",
+        status: false
     });
 
     useEffect(() => {
@@ -28,6 +29,13 @@ const CreateNote = () => {
                 setAllNote(res.data.notes)
             })
     }, [setNote])
+
+    async function doneClicked(id) {
+        await axios.post(BASE_URL + "/note/done/" + id)
+            .then((res) => {
+                setAllNote(res.data.notes)
+            })
+    }
 
     function changeHandler(event) {
         const { name, value } = event.target;
@@ -183,9 +191,13 @@ const CreateNote = () => {
                             </>
                         ) : (
                             <>
-                                <h1 className='noteH1'>{val.title}</h1>
+                                <h1 className={val.status ? 'noteH1 done' : 'noteH1'}>{val.title}</h1>
                                 <br />
-                                <p>{val.content}</p>
+                                <p className={val.status ? 'done' : ''} >{val.content}</p>
+
+                                <button className='done-button btn' onClick={() => doneClicked(index)}>
+                                    <AddTaskIcon />
+                                </button>
 
                                 <button
                                     className='btn'
@@ -193,7 +205,7 @@ const CreateNote = () => {
                                 >
                                     <DeleteOutlineIcon className='deleteIcon' />
                                 </button>
-                                {/* Add an update button */}
+
                                 <button className='btn' onClick={() => setEditIndex(index)}>< EditNoteIcon className='update-icon' /></button>
                             </>
                         )}
