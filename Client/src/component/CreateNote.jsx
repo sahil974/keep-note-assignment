@@ -10,6 +10,7 @@ import BASE_URL from '../url';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import '../toaster.css'
 
 const CreateNote = () => {
     const [expand, setExpand] = useState(false);
@@ -38,7 +39,12 @@ const CreateNote = () => {
                 await axios.post(BASE_URL + "/note/done/" + id)
                     .then((res) => {
                         setAllNote(res.data.notes)
+                    }).catch((error) => {
+                        toast.error("Opps !! Status Not Updated")
+                        console.log(error)
                     })
+
+                toast.dark("Task Status Updated !")
             }
         }
         else {
@@ -46,7 +52,11 @@ const CreateNote = () => {
                 await axios.post(BASE_URL + "/note/done/" + id)
                     .then((res) => {
                         setAllNote(res.data.notes)
+                    }).catch((error) => {
+                        toast.error("Opps !! Status Not Updated")
+                        console.log(error)
                     })
+                toast.dark("Task Status Updated !")
             }
         }
 
@@ -161,7 +171,9 @@ const CreateNote = () => {
         <>
             <ToastContainer
                 autoClose={2000}
-                position='top-center' />
+                position='top-center'
+                hideProgressBar={true}
+            />
             <div className='main_note'>
                 <form action="" onDoubleClick={hideNote}>
                     {expand ?

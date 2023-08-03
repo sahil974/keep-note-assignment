@@ -198,9 +198,13 @@ footer {
     gap: 15px;
 }
 
+/* .Toastify__toast--dark {
+    width: 100px;
+    height: 200px;
+} */
 
 
-@media (max-width: 412px) {
+@media (max-width: 425px) {
     .header {
         width: 100vw;
     }
