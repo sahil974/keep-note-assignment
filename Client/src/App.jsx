@@ -11,14 +11,14 @@ import CreateNote from './component/CreateNote'
 const App = () => {
 
   return (
-    <div>
+    <>
 
       <Header />
 
       <CreateNote />
 
       <Footer />
-    </div>
+    </>
   )
 
 }

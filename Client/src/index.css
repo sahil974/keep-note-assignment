@@ -5,7 +5,7 @@
     font-family: "Josefin Sans", "Arial Narrow";
 }
 
-.header {
+/* .header {
     width: 100%;
     line-height: 100px;
     background-color: #f5ba13;
@@ -15,7 +15,7 @@
     padding-left: 50px;
     color: white;
     box-shadow: 5px 3px 15px -5px rgba(0, 0, 0, 1);
-}
+} */
 
 .deleteIcon {
     width: 0.7rem;
@@ -205,9 +205,7 @@ footer {
 
 
 @media (max-width: 425px) {
-    .header {
-        width: 100vw;
-    }
+
 
     .main_note {
         display: flex;
