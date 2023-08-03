@@ -8,6 +8,8 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import BASE_URL from '../url';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CreateNote = () => {
     const [expand, setExpand] = useState(false);
@@ -31,10 +33,23 @@ const CreateNote = () => {
     }, [setNote])
 
     async function doneClicked(id) {
-        await axios.post(BASE_URL + "/note/done/" + id)
-            .then((res) => {
-                setAllNote(res.data.notes)
-            })
+        if (allNote[id].status === true) {
+            if (window.confirm("Is  yout task still on going ?")) {
+                await axios.post(BASE_URL + "/note/done/" + id)
+                    .then((res) => {
+                        setAllNote(res.data.notes)
+                    })
+            }
+        }
+        else {
+            if (window.confirm("Is  yout task completed ?")) {
+                await axios.post(BASE_URL + "/note/done/" + id)
+                    .then((res) => {
+                        setAllNote(res.data.notes)
+                    })
+            }
+        }
+
     }
 
     function changeHandler(event) {
@@ -64,11 +79,12 @@ const CreateNote = () => {
             axios.post(BASE_URL + "/note", note)
                 .then((res) => {
                     if (res.data === 'notadded') {
-                        alert("not added")
+                        toast.error("Opps !! Task Not Added")
                     }
                     else {
                         // alert("added to database")
                         setAllNote(res.data)
+                        toast.success("Task Succesfully added !")
                     }
                 })
 
@@ -89,24 +105,29 @@ const CreateNote = () => {
 
     async function removeNote(id) {
 
-        await axios.delete(BASE_URL + "/note/" + id)
-            .then((res) => {
-                if (res.data === "deleted") {
-                    // alert("deleted")
-                }
-                else {
-                    alert("not deleted")
-                }
-            })
-            .catch((err) => {
-                console.log(err)
+        if (window.confirm("Do you want to delete this note?") === true) {
+            await axios.delete(BASE_URL + "/note/" + id)
+                .then((res) => {
+                    if (res.data === "deleted") {
+                        // alert("deleted")
+                        toast.dark("Task Deleted !")
+                    }
+                    else {
+                        toast("Opps !! Task Not Deleted")
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+
+            const temp = allNote.filter((ele, ind) => {
+                return ind !== id
             })
 
-        const temp = allNote.filter((ele, ind) => {
-            return ind !== id
-        })
+            setAllNote(temp)
 
-        setAllNote(temp)
+        }
+
 
     }
 
@@ -120,12 +141,8 @@ const CreateNote = () => {
                 .then((res) => {
                     // Update the state with the updated note content
                     setAllNote(res.data)
+                    toast.success("Task Updated !")
 
-                    // setAllNote(prevNotes => {
-                    //     const updatedNotes = [...prevNotes];
-                    //     updatedNotes[index].content = updatedContent;
-                    //     return updatedNotes;
-                    // });
                     setEditIndex(-1);
                     setUpdatedContent("");
                     setUpdatedTitle("")
@@ -142,6 +159,9 @@ const CreateNote = () => {
     return (
 
         <>
+            <ToastContainer
+                autoClose={2000}
+                position='top-center' />
             <div className='main_note'>
                 <form action="" onDoubleClick={hideNote}>
                     {expand ?
@@ -195,18 +215,21 @@ const CreateNote = () => {
                                 <br />
                                 <p className={val.status ? 'done' : ''} >{val.content}</p>
 
-                                <button className='done-button btn' onClick={() => doneClicked(index)}>
-                                    <AddTaskIcon />
-                                </button>
+                                <div className="note-btn-container">
+                                    <button className='done-button btn' onClick={() => doneClicked(index)}>
+                                        <AddTaskIcon />
+                                    </button>
 
-                                <button
-                                    className='btn'
-                                    onClick={() => removeNote(index)}
-                                >
-                                    <DeleteOutlineIcon className='deleteIcon' />
-                                </button>
 
-                                <button className='btn' onClick={() => setEditIndex(index)}>< EditNoteIcon className='update-icon' /></button>
+                                    <button className='btn' onClick={() => setEditIndex(index)}>< EditNoteIcon
+                                        className='update-icon' /></button>
+                                    <button
+                                        className='btn'
+                                        onClick={() => removeNote(index)}
+                                    >
+                                        <DeleteOutlineIcon className='deleteIcon' />
+                                    </button>
+                                </div>
                             </>
                         )}
                     </div>

@@ -192,6 +192,12 @@ footer {
     text-transform: capitalize;
 }
 
+.note-btn-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
 
 
 @media (max-width: 412px) {
