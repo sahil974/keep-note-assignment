@@ -35,6 +35,7 @@ const footerStyle = {
     background: '#f5ba13',
     color: 'white',
     textAlign: 'center',
+    marginTop: '20px',
     padding: '10px',
 
 };
